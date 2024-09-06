@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
               <div class="card-body">
               <?php if (isset($error)) : ?>
                 <div class="alert alert-danger">
-                      <div class="alert-title">Error</div>
+                      <div class="alert-title">Login Gagal</div>
                       Email / Password Salah
                     </div>
                 <?php endif; ?>
