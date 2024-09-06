@@ -2,6 +2,11 @@
 session_start();
 require 'config.php';
 
+if (isset($_SESSION['login'])) {
+  header("Location: dashboard.php");
+  exit;
+}
+
 if (isset($_POST['submit'])) {
   $email = $_POST['email'];
   $password = md5($_POST['password']);
