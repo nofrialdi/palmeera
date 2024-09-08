@@ -6,11 +6,13 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Otika - Admin Dashboard Template</title>
-  <!-- General CSS Files -->">
-  <link rel="stylesheet" href="../assets/css/app.min.css">
-  <link rel="stylesheet" href="../assets/bundles/datatables/datatables.min.css">
-  <link rel="stylesheet" href="../assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
+  <title>Palmeera</title>
+ <!-- General CSS Files -->
+ <link rel="stylesheet" href="../assets/css/app.min.css">
+  <link rel="stylesheet" href="../assets/bundles/summernote/summernote-bs4.css">
+  <link rel="stylesheet" href="../assets/bundles/codemirror/lib/codemirror.css">
+  <link rel="stylesheet" href="../assets/bundles/codemirror/theme/duotone-dark.css">
+  <link rel="stylesheet" href="../assets/bundles/jquery-selectric/selectric.css">
   <!-- Template CSS -->
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/components.css">
@@ -64,61 +66,40 @@
       <div class="main-content">
         <section class="section">
           <div class="section-body">
-            <div class="row">
+          <div class="row">
               <div class="col-12">
-                <div><h3>News</h3></div>
                 <div class="card">
                   <div class="card-header">
-                   
-                    <div><button onclick="window.location.href='addNews.php'" type="button"  class="btn btn-primary"> <i class="far fa-newspaper"></i> Add News</button></div>
+                    <h4>Add News</h4>
                   </div>
                   <div class="card-body">
-                 
-                    <div class="table-responsive">
-                      <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
-                        <thead>
-                          <tr>
-                            <th>No</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>News 1</td>
-                            <td>Category 1</td>
-                            <td>
-                                <a href="#" class="btn btn-info">Detail</a>
-                                <a href="#" class="btn btn-success">Edit</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
-                            </td>
-                          </tr>
-                          <tr>
-                          <td>2</td>
-                          <td>News 2</td>
-                            <td>Catgory 2</td>
-                            <td>
-                                <a href="#" class="btn btn-info">Detail</a>
-                                <a href="#" class="btn btn-success">Edit</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
-                            </td>
-                           
-                          </tr>
-                          <tr>
-                          <td>3</td>
-                            <td>News 3</td>
-                            <td>Category 3</td>
-                            <td>
-                                <a href="#" class="btn btn-info">Detail</a>
-                                <a href="#" class="btn btn-success">Edit</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
-                            </td>
-                          </tr>
-                         
-                        </tbody>
-                      </table>
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Title</label>
+                      <div class="col-sm-12 col-md-7">
+                        <input type="text" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Category</label>
+                      <div class="col-sm-12 col-md-7">
+                        <select class="form-control selectric">
+                          <option>Tech</option>
+                          <option>News</option>
+                          <option>Political</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Content</label>
+                      <div class="col-sm-12 col-md-7">
+                        <textarea class="summernote"></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+                      <div class="col-sm-12 col-md-7">
+                        <button class="btn btn-primary">Publish</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -227,14 +208,16 @@
       </footer>
     </div>
   </div>
-  <!-- General JS Scripts -->
-  <script src="../assets/js/app.min.js"></script>
+    <!-- General JS Scripts -->
+    <script src="../assets/js/app.min.js"></script>
   <!-- JS Libraies -->
-  <script src="../assets/bundles/datatables/datatables.min.js"></script>
-  <script src="../assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
-  <script src="../assets/bundles/jquery-ui/jquery-ui.min.js"></script>
+  <script src="../assets/bundles/summernote/summernote-bs4.js"></script>
+  <script src="../assets/bundles/codemirror/lib/codemirror.js"></script>
+  <script src="../assets/bundles/codemirror/mode/javascript/javascript.js"></script>
+  <script src="../assets/bundles/jquery-selectric/jquery.selectric.min.js"></script>
+  <script src="../assets/bundles/ckeditor/ckeditor.js"></script>
   <!-- Page Specific JS File -->
-  <script src="../assets/js/page/datatables.js"></script>
+  <script src="../assets/js/page/ckeditor.js"></script>
   <!-- Template JS File -->
   <script src="../assets/js/scripts.js"></script>
   <!-- Custom JS File -->
