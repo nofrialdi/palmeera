@@ -1,3 +1,18 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['login'])) {
+    header("Location: index.php");
+    exit;
+}
+require 'config.php';
+
+$result = mysqli_query($koneksi, "SELECT * FROM news");
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -85,38 +100,18 @@
                           </tr>
                         </thead>
                         <tbody>
+                          <?php $i = 1; ?>
+                          <?php while ($row = mysqli_fetch_assoc($result)) :  ?>
                           <tr>
-                            <td>1</td>
-                            <td>News 1</td>
-                            <td>Category 1</td>
+                            <td><?= $i++ ?></td>
+                            <td><?= $row['title'] ?></td>
+                            <td><?= $row['category'] ?></td>
                             <td>
-                                <a href="#" class="btn btn-info">Detail</a>
-                                <a href="#" class="btn btn-success">Edit</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
+                                <a href="news/editNews.php?id=<?= $row['id'] ?>" class="btn btn-success">Edit</a>
+                                <a href="news/deleteNews.php?id=<?= $row['id'] ?>" class="btn btn-danger">Delete</a>
                             </td>
                           </tr>
-                          <tr>
-                          <td>2</td>
-                          <td>News 2</td>
-                            <td>Catgory 2</td>
-                            <td>
-                                <a href="#" class="btn btn-info">Detail</a>
-                                <a href="#" class="btn btn-success">Edit</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
-                            </td>
-                           
-                          </tr>
-                          <tr>
-                          <td>3</td>
-                            <td>News 3</td>
-                            <td>Category 3</td>
-                            <td>
-                                <a href="#" class="btn btn-info">Detail</a>
-                                <a href="#" class="btn btn-success">Edit</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
-                            </td>
-                          </tr>
-                         
+                          <?php endwhile;  ?>
                         </tbody>
                       </table>
                     </div>

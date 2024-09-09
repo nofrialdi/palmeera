@@ -8,24 +8,38 @@ if (!isset($_SESSION['login'])) {
 }
 require '../config.php';
 
+$id = $_GET['id'];
+$sql = "SELECT * FROM news WHERE id = $id";
+
+$result = mysqli_query($koneksi, $sql);
+
+$data = mysqli_fetch_assoc($result);
+$id = $data['id'];
+$title = $data['title'];
+$content = $data['content'];
+$category = base64_decode($data['category']);
+
+
 if (isset($_POST['submit'])) {
     $title = $_POST['title'];
     $category = $_POST['category'];
-    $content =base64_encode($_POST['content']);
+    $content = base64_encode($_POST['content']);
 
-    $sql = "INSERT INTO news (title, category, content) VALUES ('$title', '$category', '$content')";
+    $sql = "UPDATE news SET title = '$title', category = '$category', content = '$content' WHERE id = $id";
 
     mysqli_query($koneksi, $sql);
 
     if (mysqli_affected_rows($koneksi) > 0) {
-        echo "<script>alert('Data added successfully!')</script>";
+        echo "<script>alert('Data updated successfully!')</script>";
         echo "<script>window.location.href = '../news.php'</script>";
     }
     else {
-        echo "<script>alert('Data failed to add!')</script>";
+        echo "<script>alert('Data failed to update!')</script>";
         echo "<script>window.location.href = '../news.php'</script>";
         echo mysqli_error($koneksi);
     }
+
+
 
 
 
@@ -105,30 +119,33 @@ if (isset($_POST['submit'])) {
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4>Add News</h4>
+                    <h4>Edit News</h4>
                   </div>
                   <form action="" method="POST" >
                   <div class="card-body"> 
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="title">Title</label>
                       <div class="col-sm-12 col-md-7">
-                        <input type="text" class="form-control" name="title" id="title" require>
+                        <input type="text" class="form-control" name="title" id="title" value="<?= $data['title'] ?>" require>
                       </div>
                     </div>
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="category">Category</label>
                       <div class="col-sm-12 col-md-7">
+                        
                         <select class="form-control selectric" name="category" id="category" require>
+                        <option selected value="<?= $data['category'] ?>"><?= $data['category'] ?></option>
                           <option value="">--Select Category--</option>
-                          <option value="Operasional">Operasional</option>
                           <option value="Partnership">Partnership</option>
+                          <option value="Operational">Operational</option>
+                         
                         </select>
                       </div>
                     </div>
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="content">Content</label>
                       <div class="col-sm-12 col-md-7">
-                        <textarea class="summernote" name="content" id="content" require></textarea>
+                        <textarea class="summernote" name="content" id="content" require><?= base64_decode($data['content']) ?></textarea>
                       </div>
                     </div>
                     <div class="form-group row mb-4">
