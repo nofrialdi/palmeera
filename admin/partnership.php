@@ -1,38 +1,18 @@
 <?php
-
 session_start();
 
 if (!isset($_SESSION['login'])) {
-    header("Location: ../index.php");
+    header("Location: index.php");
     exit;
 }
-require '../config.php';
+require 'config.php';
 
-if (isset($_POST['submit'])) {
-    $title = $_POST['title'];
-    $category = $_POST['category'];
-    $content =base64_encode($_POST['content']);
-
-    $sql = "INSERT INTO news (title, category, content) VALUES ('$title', '$category', '$content')";
-
-    mysqli_query($koneksi, $sql);
-
-    if (mysqli_affected_rows($koneksi) > 0) {
-        echo "<script>alert('Data added successfully!')</script>";
-        echo "<script>window.location.href = '../news.php'</script>";
-    }
-    else {
-        echo "<script>alert('Data failed to add!')</script>";
-        echo "<script>window.location.href = '../news.php'</script>";
-        echo mysqli_error($koneksi);
-    }
+$result = mysqli_query($koneksi, "SELECT * FROM news");
 
 
 
-}
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,19 +21,17 @@ if (isset($_POST['submit'])) {
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Palmeera</title>
- <!-- General CSS Files -->
- <link rel="stylesheet" href="../assets/css/app.min.css">
-  <link rel="stylesheet" href="../assets/bundles/summernote/summernote-bs4.css">
-  <link rel="stylesheet" href="../assets/bundles/codemirror/lib/codemirror.css">
-  <link rel="stylesheet" href="../assets/bundles/codemirror/theme/duotone-dark.css">
-  <link rel="stylesheet" href="../assets/bundles/jquery-selectric/selectric.css">
+  <title>Otika - Admin Dashboard Template</title>
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="assets/css/app.min.css">
+  <link rel="stylesheet" href="assets/bundles/datatables/datatables.min.css">
+  <link rel="stylesheet" href="assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
   <!-- Template CSS -->
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
   <!-- Custom style CSS -->
-  <link rel="stylesheet" href="../assets/css/custom.css">
-  <link rel='shortcut icon' type='image/x-icon' href='../assets/img/favicon.ico' />
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <link rel='shortcut icon' type='image/x-icon' href='assets/img/favicon.ico' />
 </head>
 
 <body>
@@ -63,16 +41,22 @@ if (isset($_POST['submit'])) {
       <div class="navbar-bg"></div>
       <nav class="navbar navbar-expand-lg main-navbar sticky">
         <div class="form-inline mr-auto">
-        
+        <ul class="navbar-nav mr-3">
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg
+									collapse-btn"> <i data-feather="align-justify"></i></a></li>
+            <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                <i data-feather="maximize"></i>
+              </a></li>
+            <li>
         </div>
         <ul class="navbar-nav navbar-right">
        
           <li class="dropdown"><a href="#" data-toggle="dropdown"
-              class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="../assets/img/user.png"
+              class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="assets/img/user.png"
                 class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
             <div class="dropdown-menu dropdown-menu-right pullDown">
              
-              <a href="../logout.php" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
+              <a href="logout.php" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
                 Logout
               </a>
             </div>
@@ -82,20 +66,20 @@ if (isset($_POST['submit'])) {
       <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="dashboard.php"> <img alt="image" src="../assets/img/logo.png" class="header-logo" /> <span
+            <a href="dashboard.php"> <img alt="image" src="assets/img/logo.png" class="header-logo" /> <span
                 class="logo-name">Palmeera Lounge</span>
             </a>
           </div>
           <ul class="sidebar-menu">
            
           <li >
-              <a href="../dashboard.php" class="nav-link"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
+              <a href="dashboard.php" class="nav-link"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
             </li>
-            <li class="dropdown active">
-              <a class="nav-link" href="../news.php"><i class="fas fa-newspaper""></i><span>News</span></a>
-            </li> 
             <li>
-              <a class="nav-link" href="../partnership.php"> <i class="fas fa-building"></i><span>Partnership</span></a>
+              <a class="nav-link" href="news.php"><i class="fas fa-newspaper""></i><span>News</span></a>
+            </li> 
+            <li class="dropdown active">
+              <a class="nav-link" href="partnership.php"> <i class="fas fa-building"></i><span>Partnership</span></a>
             </li>    
           </ul>
         </aside>
@@ -104,44 +88,47 @@ if (isset($_POST['submit'])) {
       <div class="main-content">
         <section class="section">
           <div class="section-body">
-          <div class="row">
+            <div class="row">
               <div class="col-12">
+                <div><h3>Partnership</h3></div>
                 <div class="card">
                   <div class="card-header">
-                    <h4>Add News</h4>
+                   
+                    <div><a href="partnership/addPartnership.php" type="button"  class="btn btn-primary"> <i class="fas fa-building"></i> Add Partnership</a></div>
                   </div>
-                  <form action="" method="POST" >
-                  <div class="card-body"> 
-                    <div class="form-group row mb-4">
-                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="title">Title</label>
-                      <div class="col-sm-12 col-md-7">
-                        <input type="text" class="form-control" name="title" id="title" require>
-                      </div>
-                    </div>
-                    <div class="form-group row mb-4">
-                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="category">Category</label>
-                      <div class="col-sm-12 col-md-7">
-                        <select class="form-control selectric" name="category" id="category" require>
-                          <option value="">--Select Category--</option>
-                          <option value="Operasional">Operasional</option>
-                          <option value="Partnership">Partnership</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="form-group row mb-4">
-                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="content">Content</label>
-                      <div class="col-sm-12 col-md-7">
-                        <textarea class="summernote" name="content" id="content" require></textarea>
-                      </div>
-                    </div>
-                    <div class="form-group row mb-4">
-                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
-                      <div class="col-sm-12 col-md-7">
-                        <button type="submit" name="submit" class="btn btn-primary">Publish</button>
-                      </div>
+                  <div class="card-body">
+                 
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
+                        <thead>
+                          <tr>
+                            <th>No</th>
+                            <th>Agency Name</th>
+                            <th>Contact Person</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php $i = 1; ?>
+                          <?php while ($row = mysqli_fetch_assoc($result)) :  ?>
+                          <tr>
+                            <td><?= $i++ ?></td>
+                            <td><?= $row['title'] ?></td>
+                            <td><?= $row['category'] ?></td>
+                            <td><?= $row['title'] ?></td>
+                            <td><?= $row['category'] ?></td>
+                            <td>
+                                <a href="news/editNews.php?id=<?= $row['id'] ?>" class="btn btn-success">Edit</a>
+                                <a href="news/deleteNews.php?id=<?= $row['id'] ?>" class="btn btn-danger">Delete</a>
+                            </td>
+                          </tr>
+                          <?php endwhile;  ?>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
-                  </form>
                 </div>
               </div>
             </div>
@@ -248,20 +235,18 @@ if (isset($_POST['submit'])) {
       </footer>
     </div>
   </div>
-    <!-- General JS Scripts -->
-    <script src="../assets/js/app.min.js"></script>
+  <!-- General JS Scripts -->
+  <script src="assets/js/app.min.js"></script>
   <!-- JS Libraies -->
-  <script src="../assets/bundles/summernote/summernote-bs4.js"></script>
-  <script src="../assets/bundles/codemirror/lib/codemirror.js"></script>
-  <script src="../assets/bundles/codemirror/mode/javascript/javascript.js"></script>
-  <script src="../assets/bundles/jquery-selectric/jquery.selectric.min.js"></script>
-  <script src="../assets/bundles/ckeditor/ckeditor.js"></script>
+  <script src="assets/bundles/datatables/datatables.min.js"></script>
+  <script src="assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
+  <script src="assets/bundles/jquery-ui/jquery-ui.min.js"></script>
   <!-- Page Specific JS File -->
-  <script src="../assets/js/page/ckeditor.js"></script>
+  <script src="assets/js/page/datatables.js"></script>
   <!-- Template JS File -->
-  <script src="../assets/js/scripts.js"></script>
+  <script src="assets/js/scripts.js"></script>
   <!-- Custom JS File -->
-  <script src="../assets/js/custom.js"></script>
+  <script src="assets/js/custom.js"></script>
 </body>
 
 

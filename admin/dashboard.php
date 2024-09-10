@@ -35,7 +35,13 @@ require 'config.php';
       <div class="navbar-bg"></div>
       <nav class="navbar navbar-expand-lg main-navbar sticky">
         <div class="form-inline mr-auto">
-        
+        <ul class="navbar-nav mr-3">
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg
+									collapse-btn"> <i data-feather="align-justify"></i></a></li>
+            <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                <i data-feather="maximize"></i>
+              </a></li>
+            <li>
         </div>
         <ul class="navbar-nav navbar-right">
        
@@ -61,10 +67,13 @@ require 'config.php';
           <ul class="sidebar-menu">
            
             <li class="dropdown active">
-              <a href="dashboard.php" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+              <a href="dashboard.php" class="nav-link"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
             </li>
             <li>
-              <a class="nav-link" href="news.php"><i data-feather="file"></i><span>News</span></a>
+              <a class="nav-link" href="news.php"><i class="fas fa-newspaper""></i><span>News</span></a>
+            </li> 
+            <li>
+              <a class="nav-link" href="partnership.php"> <i class="fas fa-building"></i></i><span>Partnership</span></a>
             </li>    
           </ul>
         </aside>

@@ -102,12 +102,15 @@ if (isset($_POST['submit'])) {
           </div>
           <ul class="sidebar-menu">
            
-            <li >
-              <a href="../dashboard.php" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+          <li >
+              <a href="../dashboard.php" class="nav-link"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
             </li>
             <li class="dropdown active">
-              <a class="nav-link" href="../news.php"><i data-feather="file"></i><span>News</span></a>
-            </li>
+              <a class="nav-link" href="../news.php"><i class="fas fa-newspaper""></i><span>News</span></a>
+            </li> 
+            <li>
+              <a class="nav-link" href="../partnership.php"> <i class="fas fa-building"></i></i><span>Partnership</span></a>
+            </li>    
           </ul>
         </aside>
       </div>
