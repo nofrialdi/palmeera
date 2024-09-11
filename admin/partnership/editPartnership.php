@@ -8,70 +8,86 @@ if (!isset($_SESSION['login'])) {
 }
 require '../config.php';
 
+$id = $_GET['id'];
+$sql = "SELECT * FROM partnership WHERE id = $id";
+
+$result = mysqli_query($koneksi, $sql);
+
+$data = mysqli_fetch_assoc($result);
+$id = $data['id'];
+$agency_name = $data['agency_name'];
+$country = $data['country'];
+$province = $data['province'];
+$city = $data['city'];
+$address = $data['address'];
+$business_type = $data['business_type'];
+$industry_registration_type = $data['industry_registration_type'];
+$industry_registration_number = $data['industry_registration_number'];
+$contact_person = $data['contact_person'];
+$phone_number = $data['phone_number'];
+$email = $data['email'];
+$website = $data['website'];
+$registration_date = $data['registration_date'];
+
+
 if (isset($_POST['submit'])) {
-  $agency_name = $_POST['agency_name'];
-  $country = $_POST['country'];
-  $province = $_POST['province'];
-  $city = $_POST['city'];
-  $address = $_POST['address'];
-  $business_type = $_POST['business_type'];
-  $industry_registration_type = $_POST['industry_registration_type'];
-  $industry_registration_number = $_POST['industry_registration_number'];
-  $contact_person = $_POST['contact_person'];
-  $phone_number = $_POST['phone_number'];
-  $email = $_POST['email'];
-  $website = $_POST['website'];
-  $registration_date = $_POST ['registration_date'];
- 
+    $agency_name = $_POST['agency_name'];
+    $country = $_POST['country'];
+    $province = $_POST['province'];
+    $city = $_POST['city'];
+    $address = $_POST['address'];
+    $business_type = $_POST['business_type'];
+    $industry_registration_type = $_POST['industry_registration_type'];
+    $industry_registration_number = $_POST['industry_registration_number'];
+    $contact_person = $_POST['contact_person'];
+    $phone_number = $_POST['phone_number'];
+    $email = $_POST['email'];
+    $website = $_POST['website'];
+    $registration_date = $_POST ['registration_date'];
+    $company_logo = $_FILES['company_logo']['name'];
 
- 
+    if ($_FILES['company_logo']['size'] === 4) {
+        echo "<script>alert('Please upload company logo')</script>";
+    } else {
+        $file_name = $_FILES['company_logo']['name'];
+        $file_size = $_FILES['company_logo']['size'];
+        $file_tmp = $_FILES['company_logo']['tmp_name'];
+
+        $valid_exstendsion = ['jpg', 'jpeg', 'png'];
+        $extension = explode('.', $file_name);
+        $extension = strtolower(end($extension));
+
+        if (!in_array($extension, $valid_exstendsion)) {
+            echo "<script>alert('Invalid file type')</script>";
+        } elseif ($file_size > 1000000) {
+            echo "<script>alert('File size is too large')</script>";
+        } else {
+            $new_image_name = uniqid();
+            $new_image_name .= '.' . $extension;
+
+            move_uploaded_file($file_tmp, '../assets/img/partnership-logos/' . $new_image_name);
+
+        }
 
 
+    }
 
-  if ($_FILES['company_logo']['size'] === 4) {
-    echo "<script>alert('Please upload company logo')</script>";
-  } else {
-    $file_name = $_FILES['company_logo']['name'];
-    $file_size = $_FILES['company_logo']['size'];
-    $file_tmp = $_FILES['company_logo']['tmp_name'];
+    $sql = "UPDATE partnership SET agency_name = '$agency_name', country = '$country', province = '$province', city = '$city',address = '$address',business_type = '$business_type',industry_registration_type ='$industry_registration_type', industry_registration_number = '$industry_registration_number', contact_person = '$contact_person', phone_number = '$phone_number', email = '$email', website = '$website', registration_date = '$registration_date', company_logo = '$new_image_name'  WHERE id = $id";
 
-    $valid_exstendsion = ['jpg', 'jpeg', 'png'];
-    $extension = explode('.', $file_name);
-    $extension = strtolower(end($extension));
+    mysqli_query($koneksi, $sql);
 
-    if (!in_array($extension, $valid_exstendsion)) {
-      echo "<script>alert('Invalid file type')</script>";
-    }elseif ($file_size > 1000000) {
-      echo "<script>alert('File size is too large')</script>"; 
+    if (mysqli_affected_rows($koneksi) > 0) {
+        echo "<script>alert('Data updated successfully!')</script>";
+        echo "<script>window.location.href = '../partnership.php'</script>";
+       
     }
     else {
-      $new_image_name = uniqid();
-      $new_image_name .= '.' . $extension;
-
-      move_uploaded_file($file_tmp, '../assets/img/partnership-logos/' . $new_image_name);
-
+        echo "<script>alert('Data failed to update!')</script>";
+        echo "<script>window.location.href = '../partnership.php'</script>";
+       
+        echo mysqli_error($koneksi);
     }
-    
-    
-  }
-  $sql = "INSERT INTO partnership (agency_name, country, province, city, address, business_type, industry_registration_type, industry_registration_number, contact_person, phone_number, email, website, registration_date, company_logo) values ('$agency_name', '$country', '$province', '$city', '$address', '$business_type', '$industry_registration_type', '$industry_registration_number', '$contact_person', '$phone_number', '$email', '$website','$registration_date', '$new_image_name') ";
-
-  mysqli_query($koneksi, $sql);
-
-  if (mysqli_affected_rows($koneksi) > 0) {
-    echo "<script>alert('Data added successfully!')</script>";
-    echo "<script>window.location.href = '../partnership.php'</script>";
    
-  }
-  else {
-    echo "<script>alert('Data failed to add!')</script>";
-    echo "<script>window.location.href = '../partnership.php'</script>";
-    echo mysqli_error($koneksi);
-  }
-  
-
-
-
 
 }
 
@@ -170,13 +186,14 @@ if (isset($_POST['submit'])) {
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="agency_name">Agency Name</label>
                       <div class="col-sm-12 col-md-7">
-                        <input type="text" class="form-control" name="agency_name" id="agency_name" require>
+                        <input type="text" class="form-control" name="agency_name" id="agency_name" value="<?php echo $agency_name; ?>" require>
                       </div>
                     </div>
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="country">Country</label>
                       <div class="col-sm-12 col-md-7">
                         <select class="form-control selectric" name="country" id="country" require>
+                        <option selected value="<?= $data['country'] ?>"><?= $data['country'] ?></option>
                             <option value="" >Select Country</option>
                             <option value="Afghanistan">Afghanistan</option>
                             <option value="Åland Islands">Åland Islands</option>
@@ -428,7 +445,7 @@ if (isset($_POST['submit'])) {
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="province">Province</label>
                       <div class="col-sm-12 col-md-7">
-                        <input type="text" class="form-control" name="province" id="province" require>
+                        <input type="text" class="form-control" name="province" id="province" value="<?php echo $data['province']; ?>" require>
                       </div>
                     </div>
 
@@ -436,14 +453,14 @@ if (isset($_POST['submit'])) {
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="city">City</label>
                       <div class="col-sm-12 col-md-7">
-                        <input type="text" class="form-control" name="city" id="city" require>
+                        <input type="text" class="form-control" name="city" id="city" value="<?php echo $data['city']; ?>" require>
                       </div>
                     </div>
 
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="address">Address</label>
                       <div class="col-sm-12 col-md-7">
-                        <input type="text" class="form-control" name="address" id="address" require>
+                        <input type="text" class="form-control" name="address" id="address" value="<?php echo $data['address']; ?>" require>
                       </div>
                     </div>
 
@@ -451,6 +468,7 @@ if (isset($_POST['submit'])) {
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="business_type">Business Type</label>
                       <div class="col-sm-12 col-md-7">
                         <select class="form-control selectric" name="business_type" id="business_type" require>
+                            <option selected value="<?php echo $data['business_type']; ?>"><?php echo $data['business_type']; ?></option>
                           <option value="">--Select Business Type--</option>
                           <option value="Airlines">Airlines</option>
                           <option value="Hotels">Hotels</option>
@@ -464,6 +482,7 @@ if (isset($_POST['submit'])) {
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="industry_registration_type">Industry Registration Type</label>
                       <div class="col-sm-12 col-md-7">
                         <select class="form-control selectric" name="industry_registration_type" id="industry_registration_type" require>
+                            <option selected value="<?php echo $data['industry_registration_type']; ?>"><?php echo $data['industry_registration_type']; ?></option>
                           <option value="">--Select Industry Registration Type--</option>
                           <option value="ACTA">ACTA</option>
                           <option value="CLIA">CLIA</option>
@@ -478,49 +497,49 @@ if (isset($_POST['submit'])) {
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="industry_registration_number">Industry Registration Number</label>
                       <div class="col-sm-12 col-md-7">
-                        <input type="text" class="form-control" name="industry_registration_number" id="industry_registration_number" require>
+                        <input type="text" class="form-control" name="industry_registration_number" id="industry_registration_number" value="<?php echo $data['industry_registration_number']; ?>" require>
                       </div>
                     </div>
 
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="contact_person">Contact Person</label>
                       <div class="col-sm-12 col-md-7">
-                        <input type="text" class="form-control" name="contact_person" id="contact_person" require>
+                        <input type="text" class="form-control" name="contact_person" id="contact_person" value="<?php echo $data['contact_person']; ?>" require>
                       </div>
                     </div>
 
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="phone_number">Phone Number</label>
                       <div class="col-sm-12 col-md-7">
-                        <input type="text" class="form-control" name="phone_number" id="phone_number" require>
+                        <input type="text" class="form-control" name="phone_number" id="phone_number" value="<?php echo $data['phone_number']; ?>" require>
                       </div>
                     </div>
 
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="email">email</label>
                       <div class="col-sm-12 col-md-7">
-                        <input type="email" class="form-control" name="email" id="email" require>
+                        <input type="email" class="form-control" name="email" id="email" value="<?php echo $data['email']; ?>" require>
                       </div>
                     </div>
 
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="website">website</label>
                       <div class="col-sm-12 col-md-7">
-                        <input type="text" class="form-control" name="website" id="website" require>
+                        <input type="text" class="form-control" name="website" id="website" value="<?php echo $data['website']; ?>" require>
                       </div>
                     </div>
 
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="registration_date" >Registraton Date</label>
                       <div class="col-sm-12 col-md-7">
-                      <input type="date"  name="registration_date" id="registration_date" class="form-control" readonly value="<?php echo date("Y-m-d") ?>">
+                      <input type="date"  name="registration_date" id="registration_date"  class="form-control" readonly value="<?php echo $data['registration_date']; ?>">
                       </div>
                     </div>
 
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="company_logo">Company Logo</label>
                       <div class="col-sm-12 col-md-7">
-                        <input type="file" accept="jpeg|jpg|png" class="form-control" name="company_logo" id="company_logo" require>
+                        <input type="file" accept="jpeg|jpg|png" class="form-control" name="company_logo" id="company_logo"  require>
                       </div>
                     </div>
 

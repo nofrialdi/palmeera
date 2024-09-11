@@ -7,7 +7,7 @@ if (!isset($_SESSION['login'])) {
 }
 require 'config.php';
 
-$result = mysqli_query($koneksi, "SELECT * FROM news");
+$result = mysqli_query($koneksi, "SELECT * FROM partnership ");
 
 
 
@@ -40,14 +40,19 @@ $result = mysqli_query($koneksi, "SELECT * FROM news");
     <div class="main-wrapper main-wrapper-1">
       <div class="navbar-bg"></div>
       <nav class="navbar navbar-expand-lg main-navbar sticky">
-        <div class="form-inline mr-auto">
+      <div class="form-inline mr-auto">
         <ul class="navbar-nav mr-3">
-            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg
-									collapse-btn"> <i data-feather="align-justify"></i></a></li>
-            <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
-                <i data-feather="maximize"></i>
-              </a></li>
             <li>
+              <a href="#" data-toggle="sidebar" class="nav-link nav-link-lg collapse-btn"> 
+                  <i data-feather="align-justify"></i>
+                </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                <i data-feather="maximize"></i>
+              </a>
+            </li>
+          </ul>
         </div>
         <ul class="navbar-nav navbar-right">
        
@@ -107,6 +112,7 @@ $result = mysqli_query($koneksi, "SELECT * FROM news");
                             <th>Contact Person</th>
                             <th>Phone Number</th>
                             <th>Email</th>
+                            <th>Company Logo</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -115,13 +121,14 @@ $result = mysqli_query($koneksi, "SELECT * FROM news");
                           <?php while ($row = mysqli_fetch_assoc($result)) :  ?>
                           <tr>
                             <td><?= $i++ ?></td>
-                            <td><?= $row['title'] ?></td>
-                            <td><?= $row['category'] ?></td>
-                            <td><?= $row['title'] ?></td>
-                            <td><?= $row['category'] ?></td>
+                            <td><?= $row['agency_name'] ?></td>
+                            <td><?= $row['contact_person'] ?></td>
+                            <td><?= $row['phone_number'] ?></td>
+                            <td><?= $row['email'] ?></td>
+                            <td><img src="assets/img/partnership-logos/<?= $row['company_logo'] ?>" width="100px" height="100px"></td>
                             <td>
-                                <a href="news/editNews.php?id=<?= $row['id'] ?>" class="btn btn-success">Edit</a>
-                                <a href="news/deleteNews.php?id=<?= $row['id'] ?>" class="btn btn-danger">Delete</a>
+                                <a href="partnership/editPartnership.php?id=<?= $row['id'] ?>" class="btn btn-success">Edit</a>
+                                <a href="partnership/deletePartnership.php?id=<?= $row['id'] ?>" class="btn btn-danger">Delete</a>
                             </td>
                           </tr>
                           <?php endwhile;  ?>
