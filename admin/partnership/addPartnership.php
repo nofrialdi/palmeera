@@ -151,7 +151,10 @@ if (isset($_POST['submit'])) {
             </li> 
             <li class="dropdown active">
               <a class="nav-link" href="../partnership.php"> <i class="fas fa-building"></i><span>Partnership</span></a>
-            </li>    
+            </li> 
+            <li>
+              <a class="nav-link" href="../gallery.php"> <i class="fas fa-images"></i></i><span>Gallery</span></a>
+            </li>     
           </ul>
         </aside>
       </div>

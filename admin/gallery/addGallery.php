@@ -8,40 +8,52 @@ if (!isset($_SESSION['login'])) {
 }
 require '../config.php';
 
-$id = $_GET['id'];
-$sql = "SELECT * FROM news WHERE id = $id";
-
-$result = mysqli_query($koneksi, $sql);
-
-$data = mysqli_fetch_assoc($result);
-$id = $data['id'];
-$title = $data['title'];
-$content = $data['content'];
-$category = base64_decode($data['category']);
-
-
 if (isset($_POST['submit'])) {
-    $title = $_POST['title'];
-    $category = $_POST['category'];
-    $content = base64_encode($_POST['content']);
+   
+    $description =base64_encode($_POST['description']);
 
-    $sql = "UPDATE news SET title = '$title', category = '$category', content = '$content' WHERE id = $id";
+    if ($_FILES['image']['size'] === 4) {
+        echo "<script>alert('Please upload company logo')</script>";
+      } else {
+        $file_name = $_FILES['image']['name'];
+        $file_size = $_FILES['image']['size'];
+        $file_tmp = $_FILES['image']['tmp_name'];
+    
+        $valid_exstendsion = ['jpg', 'jpeg', 'png'];
+        $extension = explode('.', $file_name);
+        $extension = strtolower(end($extension));
+    
+        if (!in_array($extension, $valid_exstendsion)) {
+          echo "<script>alert('Invalid file type')</script>";
+        }elseif ($file_size > 1000000) {
+          echo "<script>alert('File size is too large')</script>"; 
+        }
+        else {
+          $new_image_name = uniqid();
+          $new_image_name .= '.' . $extension;
+    
+          move_uploaded_file($file_tmp, '../assets/img/gallery/' . $new_image_name);
+    
+        }
+        
+        
+      }
+
+    $sql = "INSERT INTO gallery (image, description) VALUES ('$new_image_name', '$description')";
 
     mysqli_query($koneksi, $sql);
 
     if (mysqli_affected_rows($koneksi) > 0) {
-        echo "<script>alert('Data updated successfully!')</script>";
-        echo "<script>window.location.href = '../news.php'</script>";
+        echo "<script>alert('Data added successfully!')</script>";
+        echo "<script>window.location='../gallery.php'</script>";
+       
     }
     else {
-        echo "<script>alert('Data failed to update!')</script>";
-        echo "<script>window.location.href = '../news.php'</script>";
+        echo "<script>alert('Data failed to add!')</script>";
+        echo "<script>window.location='../gallery.php'</script>";
+      
         echo mysqli_error($koneksi);
     }
-
-
-
-
 
 }
 
@@ -116,15 +128,15 @@ if (isset($_POST['submit'])) {
           <li >
               <a href="../dashboard.php" class="nav-link"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
             </li>
-            <li class="dropdown active">
+            <li >
               <a class="nav-link" href="../news.php"><i class="fas fa-newspaper""></i><span>News</span></a>
             </li> 
             <li>
-              <a class="nav-link" href="../partnership.php"> <i class="fas fa-building"></i></i><span>Partnership</span></a>
-            </li>
-            <li>
+              <a class="nav-link" href="../partnership.php"> <i class="fas fa-building"></i><spa    n>Partnership</spa></a>
+            </li> 
+            <li class="dropdown active">
               <a class="nav-link" href="../gallery.php"> <i class="fas fa-images"></i></i><span>Gallery</span></a>
-            </li>      
+            </li>     
           </ul>
         </aside>
       </div>
@@ -136,33 +148,23 @@ if (isset($_POST['submit'])) {
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4>Edit News</h4>
+                    <h4>Add Gallery</h4>
                   </div>
-                  <form action="" method="POST" >
-                  <div class="card-body"> 
-                    <div class="form-group row mb-4">
-                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="title">Title</label>
+                  <form action="" method="POST" enctype="multipart/form-data" >
+                  <div class="card-body">
+
+                  <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="image">Image</label>
                       <div class="col-sm-12 col-md-7">
-                        <input type="text" class="form-control" name="title" id="title" value="<?= $data['title'] ?>" require>
+                        <input type="file" accept="jpeg|jpg|png" class="form-control" name="image" id="image" require>
                       </div>
-                    </div>
+                    </div> 
+                  
+                   
                     <div class="form-group row mb-4">
-                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="category">Category</label>
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="description">Description</label>
                       <div class="col-sm-12 col-md-7">
-                        
-                        <select class="form-control selectric" name="category" id="category" require>
-                        <option selected value="<?= $data['category'] ?>"><?= $data['category'] ?></option>
-                          <option value="">--Select Category--</option>
-                          <option value="Partnership">Partnership</option>
-                          <option value="Operational">Operational</option>
-                         
-                        </select>
-                      </div>
-                    </div>
-                    <div class="form-group row mb-4">
-                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="content">Content</label>
-                      <div class="col-sm-12 col-md-7">
-                        <textarea class="summernote" name="content" id="content" require><?= base64_decode($data['content']) ?></textarea>
+                        <textarea class="summernote" name="description" id="description" require></textarea>
                       </div>
                     </div>
                     <div class="form-group row mb-4">

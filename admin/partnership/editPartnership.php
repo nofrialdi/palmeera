@@ -167,7 +167,10 @@ if (isset($_POST['submit'])) {
             </li> 
             <li class="dropdown active">
               <a class="nav-link" href="../partnership.php"> <i class="fas fa-building"></i><span>Partnership</span></a>
-            </li>    
+            </li>
+            <li>
+              <a class="nav-link" href="../gallery.php"> <i class="fas fa-images"></i></i><span>Gallery</span></a>
+            </li>      
           </ul>
         </aside>
       </div>
@@ -539,6 +542,7 @@ if (isset($_POST['submit'])) {
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="company_logo">Company Logo</label>
                       <div class="col-sm-12 col-md-7">
+                        <img src="../assets/img/partnership-logos/<?php echo $data['company_logo']; ?>" width="100px" height="100px">
                         <input type="file" accept="jpeg|jpg|png" class="form-control" name="company_logo" id="company_logo"  require>
                       </div>
                     </div>
