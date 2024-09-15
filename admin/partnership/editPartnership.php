@@ -170,7 +170,13 @@ if (isset($_POST['submit'])) {
             </li>
             <li>
               <a class="nav-link" href="../gallery.php"> <i class="fas fa-images"></i></i><span>Gallery</span></a>
-            </li>      
+            </li>
+            <li>
+              <a class="nav-link" href="../newsletter.php"> <i class="fas fa-users"></i></i><span>newsletter</span></a>
+            </li>
+            <li>
+              <a class="nav-link" href="../message.php"> <i class="fas fa-envelope"></i></i><span>Message</span></a>
+            </li>        
           </ul>
         </aside>
       </div>
