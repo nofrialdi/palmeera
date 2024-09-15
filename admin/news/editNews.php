@@ -25,7 +25,34 @@ if (isset($_POST['submit'])) {
     $category = $_POST['category'];
     $content = base64_encode($_POST['content']);
 
-    $sql = "UPDATE news SET title = '$title', category = '$category', content = '$content' WHERE id = $id";
+    if ($_FILES['image']['size'] === 4) {
+      echo "<script>alert('Please upload image of news')</script>";
+    } else {
+      $file_name = $_FILES['image']['name'];
+      $file_size = $_FILES['image']['size'];
+      $file_tmp = $_FILES['image']['tmp_name'];
+  
+      $valid_exstendsion = ['jpg', 'jpeg', 'png'];
+      $extension = explode('.', $file_name);
+      $extension = strtolower(end($extension));
+  
+      if (!in_array($extension, $valid_exstendsion)) {
+        echo "<script>alert('Invalid file type')</script>";
+      }elseif ($file_size > 1000000) {
+        echo "<script>alert('File size is too large')</script>"; 
+      }
+      else {
+        $new_image_name = uniqid();
+        $new_image_name .= '.' . $extension;
+  
+        move_uploaded_file($file_tmp, '../assets/img/news/' . $new_image_name);
+  
+      }
+      
+      
+    }
+
+    $sql = "UPDATE news SET title = '$title', image = '$new_image_name', category = '$category', content = '$content' WHERE id = $id";
 
     mysqli_query($koneksi, $sql);
 
@@ -144,7 +171,7 @@ if (isset($_POST['submit'])) {
                   <div class="card-header">
                     <h4>Edit News</h4>
                   </div>
-                  <form action="" method="POST" >
+                  <form action="" method="POST"  enctype="multipart/form-data">
                   <div class="card-body"> 
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="title">Title</label>
@@ -152,6 +179,15 @@ if (isset($_POST['submit'])) {
                         <input type="text" class="form-control" name="title" id="title" value="<?= $data['title'] ?>" require>
                       </div>
                     </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="image">Image</label>
+                      <div class="col-sm-12 col-md-7">
+                        <img src="../assets/img/news/<?= $data['image'] ?>" alt="" width="100">
+                        <input type="file" accept="jpeg|jpg|png" class="form-control" name="image" id="image" require>
+                      </div>
+                    </div> 
+
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="category">Category</label>
                       <div class="col-sm-12 col-md-7">

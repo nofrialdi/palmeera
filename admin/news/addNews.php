@@ -10,10 +10,40 @@ require '../config.php';
 
 if (isset($_POST['submit'])) {
     $title = $_POST['title'];
+
+    
+
     $category = $_POST['category'];
     $content =base64_encode($_POST['content']);
 
-    $sql = "INSERT INTO news (title, category, content) VALUES ('$title', '$category', '$content')";
+    if ($_FILES['image']['size'] === 4) {
+      echo "<script>alert('Please upload image of news')</script>";
+    } else {
+      $file_name = $_FILES['image']['name'];
+      $file_size = $_FILES['image']['size'];
+      $file_tmp = $_FILES['image']['tmp_name'];
+  
+      $valid_exstendsion = ['jpg', 'jpeg', 'png'];
+      $extension = explode('.', $file_name);
+      $extension = strtolower(end($extension));
+  
+      if (!in_array($extension, $valid_exstendsion)) {
+        echo "<script>alert('Invalid file type')</script>";
+      }elseif ($file_size > 1000000) {
+        echo "<script>alert('File size is too large')</script>"; 
+      }
+      else {
+        $new_image_name = uniqid();
+        $new_image_name .= '.' . $extension;
+  
+        move_uploaded_file($file_tmp, '../assets/img/news/' . $new_image_name);
+  
+      }
+      
+      
+    }
+
+    $sql = "INSERT INTO news (title, image, category, content) VALUES ('$title', '$new_image_name', '$category', '$content')";
 
     mysqli_query($koneksi, $sql);
 
@@ -128,7 +158,7 @@ if (isset($_POST['submit'])) {
                   <div class="card-header">
                     <h4>Add News</h4>
                   </div>
-                  <form action="" method="POST" >
+                  <form action="" method="POST" enctype="multipart/form-data" >
                   <div class="card-body"> 
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="title">Title</label>
@@ -136,13 +166,34 @@ if (isset($_POST['submit'])) {
                         <input type="text" class="form-control" name="title" id="title" require>
                       </div>
                     </div>
+
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="image">Image</label>
+                      <div class="col-sm-12 col-md-7">
+                        <input type="file" accept="jpeg|jpg|png" class="form-control" name="image" id="image" require>
+                      </div>
+                    </div> 
+
                     <div class="form-group row mb-4">
                       <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="category">Category</label>
                       <div class="col-sm-12 col-md-7">
                         <select class="form-control selectric" name="category" id="category" require>
-                          <option value="">--Select Category--</option>
-                          <option value="Operasional">Operasional</option>
-                          <option value="Partnership">Partnership</option>
+                          <option disabled selected >--Select Category--</option>
+                          <?php 
+
+                                include "../../config.php";
+                                
+
+                                $sql = "SELECT * FROM category_news";
+
+                                $result = mysqli_query($conn, $sql);
+                                while($data = mysqli_fetch_array($result)){
+
+                          ?>
+                                 <option value="<?=$data['name_category']?>"><?=$data['name_category']?></option> 
+                        <?php
+                                }
+                        ?>
                         </select>
                       </div>
                     </div>
