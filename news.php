@@ -394,14 +394,22 @@
                                 <div class="sidebar-title">
                                     <h3>News Categories</h3>
                                 </div>
-                                
+                                <?php
+                                include 'config.php';
+                                $category_news = mysqli_query($conn, "SELECT * FROM category_news");
+                                if(mysqli_num_rows($category_news) > 0){
+                                    while($fetch_category_news = mysqli_fetch_assoc($category_news)){
+                                      
+                                        
+                                ?>
 
                                 <ul class="list">
-                                    <li><a href="#">Texture Painting</a></li>
-                                    <li><a href="#">Wooden Flooring</a></li>
-                                    <li><a href="#">Artificial Grass Flooring</a></li>
-                                    <li><a href="#">Tiles &amp; Marble Works</a></li>
+                                    <li><a href="#"><?= $fetch_category_news['name_category'] ?></a></li>
                                 </ul>
+
+                                <?php }; }; ?>
+
+                                
 
                             </div>
 
